@@ -126,7 +126,7 @@ void MainWindow::handleStartStream() {
     startRTSPServer(process, statusConsole);
 
     // 调用新函数使用 FFmpeg 推送摄像头视频流
-    startFFmpegStream(process2, statusConsole);
+  //  startFFmpegStream(process2, statusConsole);
 }
 
 // 槽函数：停止视频推送
@@ -143,7 +143,14 @@ void MainWindow::handleStopStream() {
 void MainWindow::handleCameraPreview() {
     qDebug() << "Showing Camera Preview";
     statusConsole->append("Showing Camera Preview");
-    process->start("mplayer", QStringList() << "tv:// -tv driver=v4l2:device=/dev/video0");  // 使用mplayer播放摄像头画面
+    process->start("libcamera-vid", QStringList()
+            << "-t" << "0"
+            << "--inline"
+            << "--width" << "1280"
+            << "--height" << "720"
+            << "--framerate" << "30"
+            << "--bitrate" << "1000000"
+        );
 }
 
 // 槽函数：处理进程输出
