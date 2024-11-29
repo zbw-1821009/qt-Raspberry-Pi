@@ -2,10 +2,20 @@
 #include <QDebug>
 
 void startRTSPServer(QProcess *process, QTextEdit *statusConsole) {
-//    QString downloadCmd = "./rtsp-simple-server";
-      QString downloadCmd = "/home/zhang/rtsp-simple-server";
-    process->start("/bin/sh", QStringList() << "-c" << downloadCmd);
+      QString downloadCmd = "sudo /home/zhang/rtsp-simple-server ";
+      QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+      process->setProcessEnvironment(env);
+      process->setWorkingDirectory("/home/zhang");
+      process->start("/bin/sh", QStringList() << "-c" << downloadCmd);
+//      connect(process, &QProcess::readyReadStandardOutput, [=]() {
+//          qDebug() << process->readAllStandardOutput();
+//      });
 
+//      connect(process, &QProcess::readyReadStandardError, [=]() {
+//          qDebug() << process->readAllStandardError();
+//      });
+
+//      process->start(serverPath);
     if (!process->waitForStarted()) {
         statusConsole->append("Failed to start RTSP server");
         return;
